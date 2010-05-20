@@ -5,6 +5,7 @@
 
 # What ports/sockets to listen on, and what options for them.
 <%- @listen.each do |port, options| %>
+  <%- port = "'#{port}'" if port.is_a? String %>
 listen <%= port %>, <%= options %>
 <%- end %>
 
