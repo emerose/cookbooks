@@ -2,18 +2,15 @@ set_unless[:nginx][:version]      = "0.7.64"
 set_unless[:nginx][:install_path] = "/opt/nginx-#{nginx[:version]}"
 set_unless[:nginx][:src_binary]   = "#{nginx[:install_path]}/sbin/nginx"
 
-case platform
-when "debian","ubuntu"
-  set[:nginx][:dir]     = "/etc/nginx"
-  set[:nginx][:log_dir] = "/var/log/nginx"
-  set[:nginx][:user]    = "www-data"
-  set[:nginx][:binary]  = "/usr/sbin/nginx"
-else
-  set[:nginx][:dir]     = "/etc/nginx"
-  set[:nginx][:log_dir] = "/var/log/nginx"
-  set[:nginx][:user]    = "www-data"
-  set[:nginx][:binary]  = "/usr/sbin/nginx"
-end
+set[:nginx][:dir]     = "/etc/nginx"
+set[:nginx][:log_dir] = "/var/log/nginx"
+set[:nginx][:binary]  = "/usr/sbin/nginx"
+set[:nginx][:user]    = case platform
+                        when "centos","redhat","fedora"
+                          "nginx"
+                        else # notably, debian and ubuntu
+                          "www-data"
+                        end
 
 set_unless[:nginx][:configure_flags] = [
   "--prefix=#{nginx[:install_path]}",
